@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface LoggingApi {
 
     @GET("stats")
-    fun logStats(
+    fun logEvent(
         @Query("event") event: String,
         @Query("data") data: String
     ): Completable

@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.fruit_list_fragment_layout.*
 
 class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-
     lateinit var viewModel: FruitListViewModel
 
     private lateinit var adapter: FruitRecyclerViewAdapter
@@ -44,8 +43,11 @@ class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fruitsRV.layoutManager = LinearLayoutManager(context)
-        fruitsRV.adapter = adapter
+        fruitsRecyclerView.apply {
+            this.layoutManager = LinearLayoutManager(context)
+            this.adapter = adapter
+        }
+
         fruitRefreshLayout.setOnRefreshListener(this)
         observeEvents()
         viewModel.loadFruits()

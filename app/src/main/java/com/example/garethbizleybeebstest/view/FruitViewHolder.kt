@@ -5,11 +5,6 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.garethbizleybeebstest.Constants.Companion.FRUIT_KEY
-import com.example.garethbizleybeebstest.Constants.Companion.GRAMS_IN_KILO
-import com.example.garethbizleybeebstest.Constants.Companion.INVALID
-import com.example.garethbizleybeebstest.Constants.Companion.KILO_SUFFIX
-import com.example.garethbizleybeebstest.Constants.Companion.PENCE_IN_POUND
-import com.example.garethbizleybeebstest.Constants.Companion.POUND_PREFIX
 import com.example.garethbizleybeebstest.Constants.Companion.START_TIME_KEY
 import com.example.garethbizleybeebstest.R
 import com.example.garethbizleybeebstest.model.FruitItem
@@ -41,4 +36,3 @@ class FruitViewHolder(
         view.fruitName.text = fruitItem?.type?.capitalize()
     }
 }
-
