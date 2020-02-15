@@ -30,7 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fruitsRV"
+            android:id="@+id/fruitsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

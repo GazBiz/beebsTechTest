@@ -5,19 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.garethbizleybeebstest.Constants
 import com.example.garethbizleybeebstest.Constants.Companion.DISPLAY
 import com.example.garethbizleybeebstest.Constants.Companion.FRUIT_KEY
 import com.example.garethbizleybeebstest.Constants.Companion.START_TIME_KEY
 import com.example.garethbizleybeebstest.R
 import com.example.garethbizleybeebstest.logging.LoggingServiceImpl
 import com.example.garethbizleybeebstest.model.FruitItem
-import com.example.garethbizleybeebstest.toPriceDisplay
-import com.example.garethbizleybeebstest.toWeightDisplay
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.single_fruit_fragment_layout.*
 
 class SingleFruitFragment : Fragment() {
 
-    private val loggingService = LoggingServiceImpl()
+    private val disposables = CompositeDisposable()
+
+    private val loggingService = LoggingServiceImpl.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +31,7 @@ class SingleFruitFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         logDisplayTime()
-        processArgs()
+        getArgs()
         setupToolbar()
     }
 
@@ -40,7 +42,7 @@ class SingleFruitFragment : Fragment() {
         singleFruitToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
     }
     
-    private fun processArgs(){
+    private fun getArgs(){
         arguments?.getParcelable<FruitItem>(FRUIT_KEY)?.let {fruit ->
             singleFruitToolbar.title = fruit.type.capitalize()
             fruitName.text = fruit.type.capitalize()
@@ -50,9 +52,37 @@ class SingleFruitFragment : Fragment() {
     }
 
     private fun logDisplayTime(){
-        val startTime = arguments?.getLong(START_TIME_KEY) ?: 0L
-        val endTime = System.currentTimeMillis()
-        val processTime = (endTime - startTime).toString()
-        loggingService.logEvent(DISPLAY, processTime)
+        arguments?.getLong(START_TIME_KEY)?.let { startTime ->
+            val endTime = System.currentTimeMillis()
+            val displayTime = (endTime - startTime).toString()
+
+            val displayDisposable = loggingService.logEvent(DISPLAY, displayTime)
+                .subscribe()
+            disposables.add(displayDisposable)
+        }
+    }
+
+    override fun onStop() {
+        disposables.dispose()
+        super.onStop()
     }
 }
+
+fun Int?.toWeightDisplay(): String =
+    if (this == null || this <= 0)
+        Constants.INVALID
+    else
+        this.toDouble()
+            .div(Constants.GRAMS_IN_KILO)
+            .toString()
+            .plus(Constants.KILO_SUFFIX)
+
+fun Int?.toPriceDisplay(): String =
+    if (this == null || this <= 0)
+        Constants.INVALID
+    else
+        Constants.POUND_PREFIX.plus(
+            this.toDouble()
+                .div(Constants.PENCE_IN_POUND)
+                .toString()
+        )
