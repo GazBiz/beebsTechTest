@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fruit_app_nav"
+    app:startDestination="@id/fruitListFragment">
+
+    <fragment
+        android:id="@+id/fruitListFragment"
+        android:name="com.example.garethbizleybeebstest.view.FruitListFragment"
+        android:label="FruitListFragment">
+
+        <action
+            android:id="@+id/actionShowSingleFruitFragment"
+            app:destination="@id/singleFruitFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/singleFruitFragment"
+        android:name="com.example.garethbizleybeebstest.view.SingleFruitFragment"
+        android:label="SingleFruitFragment">
+
+        <argument
+            android:name="fruit"
+            app:argType="com.example.garethbizleybeebstest.model.FruitItem"
+            app:nullable="false" />
+
+        <argument
+            android:name="startTime"
+            app:argType="long"
+            app:nullable="false" />
+    </fragment>
+
+</navigation>

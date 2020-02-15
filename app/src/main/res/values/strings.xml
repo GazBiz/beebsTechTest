@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GarethBizleyBeebsTest</string>
+    <string name="price">Price:</string>
+    <string name="weight">Weight:</string>
+    <string name="type">Type:</string>
+    <string name="fruits_list">Fruits List</string>
+</resources>
