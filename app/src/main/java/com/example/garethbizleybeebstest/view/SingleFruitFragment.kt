@@ -26,7 +26,7 @@ class SingleFruitFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-         inflater.inflate(R.layout.single_fruit_fragment_layout, container, false)
+        inflater.inflate(R.layout.single_fruit_fragment_layout, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,15 +35,15 @@ class SingleFruitFragment : Fragment() {
         setupToolbar()
     }
 
-    private fun setupToolbar(){
+    private fun setupToolbar() {
         singleFruitToolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
         singleFruitToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
     }
-    
-    private fun getArgs(){
-        arguments?.getParcelable<FruitItem>(FRUIT_KEY)?.let {fruit ->
+
+    private fun getArgs() {
+        arguments?.getParcelable<FruitItem>(FRUIT_KEY)?.let { fruit ->
             singleFruitToolbar.title = fruit.type.capitalize()
             fruitName.text = fruit.type.capitalize()
             fruitWeight.text = fruit.weight.toWeightDisplay()
@@ -51,7 +51,7 @@ class SingleFruitFragment : Fragment() {
         }
     }
 
-    private fun logDisplayTime(){
+    private fun logDisplayTime() {
         arguments?.getLong(START_TIME_KEY)?.let { startTime ->
             val endTime = System.currentTimeMillis()
             val displayTime = (endTime - startTime).toString()
@@ -84,5 +84,7 @@ fun Int?.toPriceDisplay(): String =
         Constants.POUND_PREFIX.plus(
             this.toDouble()
                 .div(Constants.PENCE_IN_POUND)
+                .toBigDecimal()
+                .setScale(2)
                 .toString()
         )
