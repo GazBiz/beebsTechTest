@@ -4,22 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.example.garethbizleybeebstest.Constants
 import com.example.garethbizleybeebstest.Constants.Companion.DISPLAY
 import com.example.garethbizleybeebstest.Constants.Companion.FRUIT_KEY
 import com.example.garethbizleybeebstest.Constants.Companion.START_TIME_KEY
 import com.example.garethbizleybeebstest.R
-import com.example.garethbizleybeebstest.logging.LoggingServiceImpl
 import com.example.garethbizleybeebstest.model.FruitItem
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.single_fruit_fragment_layout.*
 
-class SingleFruitFragment : Fragment() {
-
-    private val disposables = CompositeDisposable()
-
-    private val loggingService = LoggingServiceImpl.instance
+class SingleFruitFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,15 +49,8 @@ class SingleFruitFragment : Fragment() {
             val endTime = System.currentTimeMillis()
             val displayTime = (endTime - startTime).toString()
 
-            val displayDisposable = loggingService.logEvent(DISPLAY, displayTime)
-                .subscribe()
-            disposables.add(displayDisposable)
+            logEvent(DISPLAY, displayTime)
         }
-    }
-
-    override fun onStop() {
-        disposables.dispose()
-        super.onStop()
     }
 }
 

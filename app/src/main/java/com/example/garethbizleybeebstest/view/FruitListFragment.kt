@@ -15,10 +15,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.garethbizleybeebstest.R
 import com.example.garethbizleybeebstest.viewmodel.FruitEvent
 import com.example.garethbizleybeebstest.viewmodel.FruitListViewModel
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.single_fruit_fragment_layout.*
 import kotlinx.android.synthetic.main.fruit_list_fragment_layout.*
 
-class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class FruitListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     lateinit var viewModel: FruitListViewModel
 
@@ -52,14 +53,17 @@ class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun observeEvents() {
-        viewModel.event.observe(this, Observer<FruitEvent> {
-            when (it) {
-                FruitEvent.LOAD_SUCCESS -> {
+        viewModel.event.observe(this, Observer<FruitEvent> {event ->
+            when (event) {
+                FruitEvent.LoadSuccess -> {
                     adapter.notifyDataSetChanged()
                     fruitRefreshLayout.isRefreshing = false
                 }
+                is FruitEvent.LogEvent -> {
+                    logEvent(event.event, event.data)
+                }
                 else -> {
-                    Log.d(this.toString(), "Unknown fruit event: " + it.name)
+                    Log.d(this.toString(), "Unknown fruit event: $event")
                 }
             }
         }
