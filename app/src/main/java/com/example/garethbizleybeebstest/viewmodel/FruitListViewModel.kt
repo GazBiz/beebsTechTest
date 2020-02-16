@@ -18,10 +18,6 @@ class FruitListViewModel : ViewModel() {
     private val fruitRepo =
         FruitRepoImpl(RetrofitService.createService(FruitApi::class.java))
 
-    private val disposables = CompositeDisposable()
-
-    private val loggingService = LoggingServiceImpl.instance
-
     val fruitsList = ArrayList<FruitItem>()
     private val _event = MutableLiveData<FruitEvent>()
     val event: LiveData<FruitEvent> get() = _event
@@ -29,42 +25,32 @@ class FruitListViewModel : ViewModel() {
     fun loadFruits() {
         val requestStart = System.currentTimeMillis()
 
-        val requestDisposable =
-            fruitRepo.getFruitData()
+        fruitRepo.getFruitData()
             .subscribeOn(Schedulers.io())
-            .doOnSuccess {
+            .doOnSuccess { fruits ->
                 logRequestDuration(requestStart)
-                updateViewData(it.fruitsList)
+                updateViewData(fruits.fruitsList)
             }
-            .doOnError {
-                val errorDisposable = loggingService.logEvent(ERROR, it.localizedMessage)
-                    .subscribe()
-                disposables.add(errorDisposable)
+            .doOnError { throwable ->
+                _event.postValue(FruitEvent.LogEvent(ERROR, throwable.localizedMessage))
             }
             .subscribe()
-        disposables.add(requestDisposable)
     }
 
     private fun logRequestDuration(requestStart: Long) {
         val requestEnd = System.currentTimeMillis()
         val requestDuration = (requestEnd - requestStart).toString()
-        val loadingDisposable = loggingService.logEvent(LOAD, requestDuration)
-            .subscribe()
-        disposables.add(loadingDisposable)
+        _event.postValue(FruitEvent.LogEvent(LOAD, requestDuration))
     }
 
     private fun updateViewData(fruits: List<FruitItem>) {
         fruitsList.clear()
         fruitsList.addAll(fruits)
-        _event.postValue(FruitEvent.LOAD_SUCCESS)
-    }
-
-    override fun onCleared() {
-        disposables.dispose()
-        super.onCleared()
+        _event.postValue(FruitEvent.LoadSuccess)
     }
 }
 
-enum class FruitEvent {
-    LOAD_SUCCESS
+sealed class FruitEvent {
+    object LoadSuccess : FruitEvent()
+    class LogEvent(val event: String, val data: String) : FruitEvent()
 }
