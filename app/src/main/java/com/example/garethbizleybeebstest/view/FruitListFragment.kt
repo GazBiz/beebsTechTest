@@ -31,6 +31,7 @@ class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             viewModel.fruitsList,
             this.findNavController()
         )
+        viewModel.loadFruits()
     }
 
     override fun onCreateView(
@@ -48,7 +49,6 @@ class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         fruitRefreshLayout.setOnRefreshListener(this)
         observeEvents()
-        viewModel.loadFruits()
     }
 
     private fun observeEvents() {
