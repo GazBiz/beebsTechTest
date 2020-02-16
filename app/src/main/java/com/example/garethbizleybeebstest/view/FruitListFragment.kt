@@ -43,10 +43,8 @@ class FruitListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fruitsRecyclerView.apply {
-            this.layoutManager = LinearLayoutManager(context)
-            this.adapter = adapter
-        }
+        fruitsRecyclerView.layoutManager = LinearLayoutManager(context)
+        fruitsRecyclerView.adapter = adapter
 
         fruitRefreshLayout.setOnRefreshListener(this)
         observeEvents()
