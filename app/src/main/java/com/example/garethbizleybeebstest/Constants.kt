@@ -15,5 +15,7 @@ class Constants {
         const val LOAD = "load"
         const val DISPLAY = "display"
         const val START_TIME_KEY = "startTime"
+
+        const val BASE_URL = "https://raw.githubusercontent.com/"
     }
 }
