@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface FruitApi {
 
-    @GET("data.json")
+    @GET("fmtvp/recruit-test-data/master/data.json")
     fun getFruitData(): Single<Fruits>
 }
