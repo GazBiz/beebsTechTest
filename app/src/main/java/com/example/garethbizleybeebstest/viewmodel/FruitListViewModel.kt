@@ -5,18 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.garethbizleybeebstest.Constants.Companion.ERROR
 import com.example.garethbizleybeebstest.Constants.Companion.LOAD
-import com.example.garethbizleybeebstest.api.FruitApi
-import com.example.garethbizleybeebstest.api.RetrofitService
-import com.example.garethbizleybeebstest.logging.LoggingServiceImpl
 import com.example.garethbizleybeebstest.model.FruitItem
-import com.example.garethbizleybeebstest.repo.FruitRepoImpl
-import io.reactivex.disposables.CompositeDisposable
+import com.example.garethbizleybeebstest.repo.FruitRepo
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class FruitListViewModel : ViewModel() {
-
-    private val fruitRepo =
-        FruitRepoImpl(RetrofitService.createService(FruitApi::class.java))
+class FruitListViewModel @Inject constructor(
+    private val fruitRepo: FruitRepo
+) : ViewModel() {
 
     val fruitsList = ArrayList<FruitItem>()
     private val _event = MutableLiveData<FruitEvent>()
