@@ -5,33 +5,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.garethbizleybeebstest.R
 import com.example.garethbizleybeebstest.viewmodel.FruitEvent
 import com.example.garethbizleybeebstest.viewmodel.FruitListViewModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.single_fruit_fragment_layout.*
+import com.example.garethbizleybeebstest.viewmodel.viewModel
 import kotlinx.android.synthetic.main.fruit_list_fragment_layout.*
+import javax.inject.Inject
 
 class FruitListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    lateinit var viewModel: FruitListViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModel<FruitListViewModel> { viewModelFactory }
 
     private lateinit var adapter: FruitRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FruitListViewModel::class.java)
-        adapter = FruitRecyclerViewAdapter(
-            viewModel.fruitsList,
-            this.findNavController()
-        )
         viewModel.loadFruits()
     }
 
@@ -44,6 +40,11 @@ class FruitListFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = FruitRecyclerViewAdapter(
+            viewModel.fruitsList,
+            this.findNavController()
+        )
 
         fruitsRecyclerView.layoutManager = LinearLayoutManager(context)
         fruitsRecyclerView.adapter = adapter

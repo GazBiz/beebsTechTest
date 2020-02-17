@@ -2,21 +2,15 @@ package com.example.garethbizleybeebstest.logging
 
 import android.util.Log
 import com.example.garethbizleybeebstest.api.LoggingApi
-import com.example.garethbizleybeebstest.api.RetrofitService
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LoggingServiceImpl private constructor() : LoggingService {
-
-    private val loggingApi = RetrofitService.createService(LoggingApi::class.java)
-
-    private object HOLDER {
-        val INSTANCE = LoggingServiceImpl()
-    }
-
-    companion object {
-        val instance: LoggingServiceImpl by lazy { HOLDER.INSTANCE }
-    }
+@Singleton
+class LoggingServiceImpl @Inject constructor(
+    private val loggingApi: LoggingApi
+) : LoggingService {
 
     override fun logEvent(event: String, data: String): Completable =
         loggingApi.logEvent(event, data)
