@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.garethbizleybeebstest.view.FruitListFragment
 import com.example.garethbizleybeebstest.view.SingleFruitFragment
 import com.example.garethbizleybeebstest.viewmodel.FruitListViewModel
+import com.example.garethbizleybeebstest.viewmodel.SingleFruitViewModel
 import com.example.garethbizleybeebstest.viewmodel.ViewModelFactory
 import com.example.garethbizleybeebstest.viewmodel.ViewModelMapKey
 import dagger.Binds
@@ -28,4 +29,9 @@ interface ViewModule {
     @IntoMap
     @ViewModelMapKey(FruitListViewModel::class)
     fun bindFruitListViewModel(viewModel: FruitListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelMapKey(SingleFruitViewModel::class)
+    fun bindSingleFruitViewModel(viewModel: SingleFruitViewModel): ViewModel
 }
